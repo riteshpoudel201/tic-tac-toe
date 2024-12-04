@@ -1,0 +1,35 @@
+{
+    "gridSize": 3,
+    "players": {
+      "human": {
+        "name": "Human",
+        "symbol": "X",
+        "isAI": false
+      },
+      "computer": {
+        "name": "Computer",
+        "symbol": "O",
+        "isAI": true,
+        "difficulty": "medium"
+      }
+    },
+    "theme": {
+      "background": "light",
+      "xColor": "#FF5733",
+      "oColor": "#337DFF",
+      "gridColor": "#CCCCCC"
+    },
+    "winCondition": 3,
+    "sound": {
+      "enable": true,
+      "clickSound": "click.mp3",
+      "winSound": "win.mp3",
+      "drawSound": "draw.mp3"
+    },
+    "animations": {
+      "enable": true,
+      "winAnimation": "highlight",
+      "drawAnimation": "fade"
+    }
+  }
+  
