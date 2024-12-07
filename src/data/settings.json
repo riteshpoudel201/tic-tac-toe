@@ -1,18 +1,9 @@
 {
     "gridSize": 3,
-    "players": {
-      "human": {
-        "name": "Human",
-        "symbol": "X",
-        "isAI": false
-      },
-      "computer": {
-        "name": "Computer",
-        "symbol": "O",
-        "isAI": true,
-        "difficulty": "medium"
-      }
-    },
+    "players": ["human", "computer"],
+    "currentPlayer":"computer",
+    "difficulties":["easy"],
+    "currentDifficulty":"easy",
     "theme": {
       "background": "light",
       "xColor": "#FF5733",

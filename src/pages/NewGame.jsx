@@ -9,7 +9,7 @@ import { checkWinner, randomIndex } from "../utils/function";
 
 const NewGame = () => {
   const [grid, setGrid] = useState(Array(9).fill(null));
-  const [isXTurn, setIsXTurn] = useState(false);
+  const [isXTurn, setIsXTurn] = useState(true);
   const [trackIndex, setTrackIndex] = useState([]);
   const [winner, setWinner] = useState(null);
   const { settings } = useSettings();
@@ -60,7 +60,8 @@ const NewGame = () => {
   const isDraw = grid.every((cell) => cell !== null) && !winner;
 
   useEffect(() => {
-    if (!isXTurn && winner === null) {
+    if (!isXTurn && winner === null && settings.currentPlayer === "computer") {
+      console.log("Move by AI is triggered.");
       moveByAi();
     }
   }, [isXTurn, winner]);
