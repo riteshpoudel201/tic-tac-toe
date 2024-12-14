@@ -5,24 +5,21 @@ import Layout from "../components/Layout";
 import Title from "../components/Title";
 import { useEffect, useState } from "react";
 import { useSettings } from "../context/SettingsContext";
-import { checkWinner, randomIndex } from "../utils/function";
+import {checkWinner, evaluateMove, randomIndex } from "../utils/function";
 
 const NewGame = () => {
   const [grid, setGrid] = useState(Array(9).fill(null));
   const [isXTurn, setIsXTurn] = useState(true);
-  const [trackIndex, setTrackIndex] = useState([]);
   const [winner, setWinner] = useState(null);
   const { settings } = useSettings();
 
-  console.log("Settings: ",settings)
-
-  const moveByAi = () => {
-    const aiIndex = randomIndex(trackIndex);
+  //easy difficulty starts here
+  const easyDifficullty = () => {
+    const aiIndex = randomIndex(grid);
     if (aiIndex !== null) {
       const newGrid = [...grid];
       newGrid[aiIndex] = isXTurn ? "X" : "O";
       setGrid(newGrid);
-      setTrackIndex((prev) => [...prev, aiIndex]);
       const gameWinner = checkWinner(newGrid);
       if (gameWinner) {
         setWinner(gameWinner);
@@ -31,12 +28,28 @@ const NewGame = () => {
       }
     }
   };
-  
+
+  //medium difficulty function starts here
+  const mediumDifficulty = () => {
+    const bestMove = evaluateMove(grid, setWinner, setIsXTurn);
+    console.log(bestMove);
+    if (bestMove !== -1) {
+      const newBoard = [...grid];
+      newBoard[bestMove] = "O";
+      setGrid(newBoard);
+      setIsXTurn(true);
+    }
+  };
+
+  const moveByComputer = () => {
+    settings.currentDifficulty === "easy" && easyDifficullty();
+    settings.currentDifficulty === "medium" && mediumDifficulty();
+  };
+
   const moveByHuman = (index) => {
     const newGrid = [...grid];
     newGrid[index] = isXTurn ? "X" : "O";
     setGrid(newGrid);
-    setTrackIndex((prev) => [...prev, index]);
     const gameWinner = checkWinner(newGrid);
     if (gameWinner) {
       setWinner(gameWinner);
@@ -54,7 +67,6 @@ const NewGame = () => {
     setGrid(Array(9).fill(null));
     setIsXTurn(true);
     setWinner(null);
-    setTrackIndex([]);
   };
 
   const isDraw = grid.every((cell) => cell !== null) && !winner;
@@ -62,7 +74,7 @@ const NewGame = () => {
   useEffect(() => {
     if (!isXTurn && winner === null && settings.currentPlayer === "computer") {
       console.log("Move by AI is triggered.");
-      moveByAi();
+      setTimeout(moveByComputer(), 1000);
     }
   }, [isXTurn, winner]);
 
@@ -70,7 +82,11 @@ const NewGame = () => {
     <Layout>
       <Title />
       <h2 className="text-center text-2xl font-semibold mt-4">
-        {winner ? `${winner} Wins!` : isDraw ? "It's a Draw!" : `Turn: ${isXTurn ? "X" : "O"}`}
+        {winner
+          ? `${winner} Wins!`
+          : isDraw
+          ? "It's a Draw!"
+          : `Turn: ${isXTurn ? "X" : "O"}`}
       </h2>
       {!winner && !isDraw && (
         <div className="grid grid-cols-3 grid-rows-3 gap-4 mt-8">
