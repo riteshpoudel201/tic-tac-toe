@@ -2,7 +2,7 @@
     "gridSize": 3,
     "players": ["human", "computer"],
     "currentPlayer":"computer",
-    "difficulties":["easy"],
+    "difficulties":["easy","medium"],
     "currentDifficulty":"easy",
     "theme": {
       "background": "light",
