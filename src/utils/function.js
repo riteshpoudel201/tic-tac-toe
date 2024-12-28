@@ -62,7 +62,7 @@ const evaluateBoard = (grid) => {
   return score;
 };
 
-export const evaluateMove = (grid, setWinner, setIsXTurn) => {
+export const evaluateBestMoveForMediumDifficulty = (grid, setWinner, setIsXTurn) => {
   let bestScore = -Infinity;
   let bestMove;
 
@@ -87,3 +87,59 @@ export const evaluateMove = (grid, setWinner, setIsXTurn) => {
 
   return bestMove;
 };
+
+export const minimax = (grid, depth, isMaximizing) => {
+  const score = evaluateBoard(grid);
+
+  // Terminal state: Return the score
+  if (score === 100 || score === -100 || !grid.includes(null)) {
+    return score - depth; // Prefer faster wins
+  }
+
+  if (isMaximizing) {
+    let bestScore = -Infinity;
+
+    for (let i = 0; i < grid.length; i++) {
+      if (grid[i] === null) {
+        grid[i] = "O"; // AI's move
+        bestScore = Math.max(bestScore, minimax(grid, depth + 1, false));
+        grid[i] = null; // Undo move
+      }
+    }
+
+    return bestScore;
+  } else {
+    let bestScore = Infinity;
+
+    for (let i = 0; i < grid.length; i++) {
+      if (grid[i] === null) {
+        grid[i] = "X"; // Opponent's move
+        bestScore = Math.min(bestScore, minimax(grid, depth + 1, true));
+        grid[i] = null; // Undo move
+      }
+    }
+
+    return bestScore;
+  }
+};
+
+
+export const evaluateBestMoveForHardDifficulty = (grid)=>{
+  let bestScore = -Infinity;
+  let bestMove = -1;
+
+  for (let i = 0; i < grid.length; i++) {
+    if (grid[i] === null) {
+      grid[i] = "O"; // Simulate AI's move
+      const score = minimax(grid, 0, false);
+      grid[i] = null; // Undo move
+
+      if (score > bestScore) {
+        bestScore = score;
+        bestMove = i;
+      }
+    }
+  }
+
+  return bestMove;
+}

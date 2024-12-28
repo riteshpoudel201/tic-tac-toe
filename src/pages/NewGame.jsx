@@ -5,7 +5,7 @@ import Layout from "../components/Layout";
 import Title from "../components/Title";
 import { useEffect, useState } from "react";
 import { useSettings } from "../context/SettingsContext";
-import {checkWinner, evaluateMove, randomIndex } from "../utils/function";
+import {checkWinner, evaluateBestMoveForHardDifficulty, evaluateBestMoveForMediumDifficulty, randomIndex } from "../utils/function";
 
 const NewGame = () => {
   const [grid, setGrid] = useState(Array(9).fill(null));
@@ -31,7 +31,7 @@ const NewGame = () => {
 
   //medium difficulty function starts here
   const mediumDifficulty = () => {
-    const bestMove = evaluateMove(grid, setWinner, setIsXTurn);
+    const bestMove = evaluateBestMoveForMediumDifficulty(grid, setWinner, setIsXTurn);
     console.log(bestMove);
     if (bestMove !== -1) {
       const newBoard = [...grid];
@@ -41,9 +41,20 @@ const NewGame = () => {
     }
   };
 
+const hardDifficulty = () => {
+  const bestMove = evaluateBestMoveForHardDifficulty(grid);
+  if (bestMove !== -1) {
+    const newBoard = [...grid];
+    newBoard[bestMove] = "O";
+    setGrid(newBoard);
+    setIsXTurn(true);
+  }
+}
+
   const moveByComputer = () => {
     settings.currentDifficulty === "easy" && easyDifficullty();
     settings.currentDifficulty === "medium" && mediumDifficulty();
+    settings.currentDifficulty === "hard" && hardDifficulty();
   };
 
   const moveByHuman = (index) => {
